@@ -60,7 +60,7 @@ O projeto foi construído utilizando as melhores práticas do mercado para aplic
 
 ## 🔒 Segurança e Confiabilidade
 
-Como Gerente de Projeto, a segurança dos dados é prioridade zero. Implementamos:
+Como Gerente de Projeto, a segurança dos dados é prioridade. Implementamos:
 
 1. **Firestore Security Rules (Hardened):** Regras rigorosas de validação no backend. Os usuários só podem ler e escrever dados que pertencem ao seu próprio `uid` (Tenant Isolation). Campos imutáveis (como o próprio `uid`) são protegidos contra adulteração.
 2. **Error Boundaries (Tolerância a Falhas):** Componentes React encapsulados para capturar erros de renderização, evitando que o sistema quebre por completo e exibindo uma interface amigável de recuperação.
