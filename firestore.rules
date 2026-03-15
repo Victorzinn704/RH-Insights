@@ -18,31 +18,43 @@ service cloud.firestore {
     function isValidEmployee(data) {
       return data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
              data.role in ['Gerente', 'Senior', 'Pleno', 'Junior', 'Estagiário'] &&
+             data.position is string && data.position.size() < 100 &&
+             data.section is string && data.section.size() < 100 &&
              data.salary is number && data.salary >= 0 &&
-             data.status in ['Disponível', 'Tratamento de Saúde', 'Férias', 'Viagem a Trabalho', 'Na Empresa', 'Home Office', 'Fora de Expediente', 'Atestado'];
+             data.status in ['Disponível', 'Tratamento de Saúde', 'Férias', 'Viagem a Trabalho', 'Na Empresa', 'Home Office', 'Fora de Expediente', 'Atestado'] &&
+             data.performance is number && data.performance >= 0 && data.performance <= 100 &&
+             data.complaints is number && data.complaints >= 0 &&
+             data.medicalCertificatesCount is number && data.medicalCertificatesCount >= 0 &&
+             data.area is string && data.area.size() < 100;
     }
 
     function isValidExpense(data) {
       return data.type in ['API', 'Cloud', 'Licença', 'Água', 'Luz', 'Internet', 'Outros'] &&
              data.amount is number && data.amount >= 0 &&
-             data.currency in ['USD', 'EUR', 'BRL'];
+             data.currency in ['USD', 'EUR', 'BRL'] &&
+             data.description is string && data.description.size() < 500 &&
+             data.date != null; // Ensure date exists
     }
 
     function isValidInventoryItem(data) {
-      return data.name is string && data.name.size() > 0 &&
+      return data.name is string && data.name.size() > 0 && data.name.size() < 200 &&
              data.quantity is number && data.quantity >= 0 &&
+             data.category is string && data.category.size() < 100 &&
              data.unitPrice is number && data.unitPrice >= 0;
     }
 
     function isValidRevenueRecord(data) {
       return data.type in ['in', 'out'] &&
              data.amount is number && data.amount >= 0 &&
-             data.category is string && data.category.size() > 0;
+             data.category is string && data.category.size() > 0 && data.category.size() < 100 &&
+             data.description is string && data.description.size() < 500 &&
+             data.date != null; // Ensure date exists
     }
 
     function isValidSubscription(data) {
       return data.plan in ['free', 'pro'] &&
-             data.status in ['active', 'canceled'];
+             data.status in ['active', 'canceled'] &&
+             data.currentPeriodEnd != null;
     }
 
     function isValidPortfolio(data) {

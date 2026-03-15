@@ -20,7 +20,8 @@ import {
   deleteDoc,
   Timestamp,
   orderBy,
-  setDoc
+  setDoc,
+  writeBatch
 } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -428,11 +429,26 @@ export default function App() {
       try {
         const data = JSON.parse(event.target?.result as string);
         
+        // Anti-DoS: Limit total items to prevent quota exhaustion
+        let totalItems = 0;
+        if (data.employees) totalItems += data.employees.length;
+        if (data.expenses) totalItems += data.expenses.length;
+        if (data.inventory && subscription?.plan === 'pro') totalItems += data.inventory.length;
+        if (data.revenue && subscription?.plan === 'pro') totalItems += data.revenue.length;
+
+        if (totalItems > 500) {
+          toast.error('O arquivo é muito grande. O limite é de 500 registros por importação para evitar sobrecarga.');
+          return;
+        }
+
+        const batch = writeBatch(db);
+        
         // Import Employees
         if (data.employees) {
           for (const emp of data.employees) {
             const { id, ...rest } = emp;
-            await addDoc(collection(db, 'employees'), { ...rest, uid: user.uid });
+            const docRef = doc(collection(db, 'employees'));
+            batch.set(docRef, { ...rest, uid: user.uid });
           }
         }
         
@@ -440,7 +456,8 @@ export default function App() {
         if (data.expenses) {
           for (const exp of data.expenses) {
             const { id, ...rest } = exp;
-            await addDoc(collection(db, 'expenses'), { ...rest, uid: user.uid });
+            const docRef = doc(collection(db, 'expenses'));
+            batch.set(docRef, { ...rest, uid: user.uid });
           }
         }
 
@@ -448,7 +465,8 @@ export default function App() {
         if (data.inventory && subscription?.plan === 'pro') {
           for (const item of data.inventory) {
             const { id, ...rest } = item;
-            await addDoc(collection(db, 'inventory'), { ...rest, uid: user.uid });
+            const docRef = doc(collection(db, 'inventory'));
+            batch.set(docRef, { ...rest, uid: user.uid });
           }
         }
 
@@ -456,10 +474,12 @@ export default function App() {
         if (data.revenue && subscription?.plan === 'pro') {
           for (const rev of data.revenue) {
             const { id, ...rest } = rev;
-            await addDoc(collection(db, 'revenue'), { ...rest, uid: user.uid });
+            const docRef = doc(collection(db, 'revenue'));
+            batch.set(docRef, { ...rest, uid: user.uid });
           }
         }
 
+        await batch.commit();
         toast.success('Importação concluída com sucesso!');
       } catch (error) {
         console.error('Erro na importação:', error);
