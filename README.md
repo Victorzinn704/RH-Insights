@@ -1,151 +1,276 @@
-# 🚀 Sistema de Gestão Empresarial Integrado (ERP) com IA
+<!-- =================================================================== -->
+<!-- HEADER                                                               -->
+<!-- =================================================================== -->
 
-<h2 align="center">
-  <img src="https://img.shields.io/badge/PROJETO_DE_PORTFÓLIO-FF4500?style=for-the-badge&logo=rocket&logoColor=white" alt="Projeto de Portfólio" />
-</h2>
+<h1 align="center">RH Insights</h1>
 
-![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=for-the-badge&logo=typescript)
-![Vite](https://img.shields.io/badge/Vite-6.2-purple?style=for-the-badge&logo=vite)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4.1-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Firebase](https://img.shields.io/badge/Firebase-12.10-FFCA28?style=for-the-badge&logo=firebase)
-![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI-8E75B2?style=for-the-badge&logo=google)
+<p align="center">
+  <sub>Plataforma multi-tenant de gestão de pessoas, finanças e estoque — com <b>Google Gemini</b> como consultor estratégico.</sub>
+</p>
 
-## 📋 Resumo Executivo
+<p align="center">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-4.1-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img alt="Firebase" src="https://img.shields.io/badge/Firebase-12.10-FFCA28?style=for-the-badge&logo=firebase&logoColor=black">
+  <img alt="Gemini AI" src="https://img.shields.io/badge/Google_Gemini-AI-8E75B2?style=for-the-badge&logo=google&logoColor=white">
+</p>
 
-Este projeto é uma plataforma de gestão empresarial (ERP) moderna, escalável e orientada a dados, projetada para centralizar operações de Recursos Humanos, Finanças e Estoque. O grande diferencial da plataforma é a integração nativa com a Inteligência Artificial **Google Gemini**, que atua como um consultor estratégico, fornecendo análises de desempenho de funcionários e insights financeiros em tempo real.
-
-Desenvolvido com foco em **Experiência do Usuário (UX)** e **Segurança**, o sistema possui uma arquitetura serverless (Firebase) e uma interface responsiva, garantindo alta disponibilidade e proteção de dados. O design foi projetado para ser **simples, minimalista e intuitivo**, reduzindo a carga cognitiva do usuário e permitindo que ele foque no que realmente importa: a gestão do seu negócio.
-
----
-
-## ✨ Principais Funcionalidades
-
-### 🔐 Autenticação e Cadastro (SSO)
-* **Login Seguro:** Sistema de cadastro e login simplificado utilizando a conta Google (Single Sign-On) via Firebase Authentication.
-* **Isolamento de Dados (Tenant Isolation):** Cada usuário cadastrado possui um ambiente totalmente isolado. O banco de dados garante que os dados de uma empresa jamais sejam acessados por outra.
-
-### 👥 Módulo de Recursos Humanos (RH)
-* **Gestão de Colaboradores:** Cadastro completo com cargo, salário, área de atuação e status.
-* **Métricas de Saúde:** Acompanhamento de atestados médicos para gestão de bem-estar corporativo.
-* **Análise de Performance (IA):** Avaliação automatizada do perfil do funcionário gerada pela IA do Gemini, cruzando dados de cargo, salário e histórico.
-
-### 💰 Módulo Financeiro
-* **Controle de Despesas:** Registro detalhado de saídas categorizadas (Operacional, Marketing, TI, etc.) com suporte a múltiplas moedas (BRL, USD, EUR) e conversão em tempo real.
-* **Gestão de Receitas (PRO):** Acompanhamento de entradas financeiras para cálculo de fluxo de caixa e lucro líquido.
-
-### 📦 Módulo de Estoque e Operações (Exclusivo PRO)
-* **Controle de Inventário:** Gestão de produtos, quantidades, categorias e valor unitário.
-* **Portfólio da Empresa:** Centralização da identidade visual, missão, visão e valores da corporação.
-
-### 🧠 Inteligência Artificial e Analytics
-* **Dashboard Interativo:** Gráficos dinâmicos (Barras, Linhas, Pizza) gerados via `Recharts` para visualização instantânea da saúde do negócio.
-* **Consultoria Estratégica AI:** Chatbot integrado que analisa o contexto global da empresa (despesas vs. receitas) e sugere planos de ação.
-
-### ⚙️ Administração e Sistema
-* **Autenticação Segura:** Login via Google (SSO) gerenciado pelo Firebase Auth.
-* **Exportação/Importação de Dados:** Backup completo do banco de dados em formato JSON para portabilidade e segurança.
-* **Notificações em Tempo Real:** Sistema de alertas não-intrusivos (`react-hot-toast`) para feedback imediato das ações do usuário.
-* **Dark/Light Mode:** Interface adaptável à preferência do usuário.
+<p align="center">
+  <a href="#-módulos">Módulos</a> ·
+  <a href="#-stack-técnica">Stack</a> ·
+  <a href="#-segurança-e-soc">Segurança</a> ·
+  <a href="#-executar-localmente">Rodar local</a> ·
+  <a href="#-roadmap">Roadmap</a>
+</p>
 
 ---
 
-## 🛠️ Stack Tecnológico e Arquitetura
+## 📋 Sobre
 
-O projeto foi construído utilizando as melhores práticas do mercado para aplicações Single Page Application (SPA):
+**RH Insights** é uma plataforma centrada em **Recursos Humanos** que consolida, no mesmo sistema, operações de RH, Financeiro e Estoque para pequenas e médias empresas. O diferencial é a integração nativa com o **Google Gemini**, que atua como consultor estratégico — gerando análises de desempenho de colaboradores, cruzando contexto financeiro e sugerindo planos de ação em tempo real.
 
-* **Frontend:** React 19 (Hooks, Context), TypeScript (Tipagem estática estrita).
-* **Build Tool:** Vite (HMR ultrarrápido e build otimizado).
-* **Estilização:** Tailwind CSS v4 (Utility-first, design system consistente).
-* **Animações:** Framer Motion (`motion/react`) para transições fluidas.
-* **Ícones:** Lucide React.
-* **Backend as a Service (BaaS):** Firebase.
-  * *Firestore:* Banco de dados NoSQL em tempo real.
-  * *Authentication:* Gerenciamento de identidade.
-* **Inteligência Artificial:** SDK `@google/genai` (Modelo Gemini 3.1 Pro Preview).
+Arquitetura **serverless** (Firebase), foco em **UX minimalista** e **segurança de dados** como prioridade desde o primeiro commit.
 
 ---
 
-## 🔒 Segurança, Testes de Invasão e Monitoramento (SOC)
+<!-- =================================================================== -->
+<!-- MÓDULOS                                                              -->
+<!-- =================================================================== -->
 
-Como Gerente de Projeto, a segurança dos dados é prioridade zero. Este projeto foi submetido a rigorosos testes de segurança (Red Team) para garantir a integridade dos dados em produção. A arquitetura foi desenhada para ser integrada a um **SOC (Security Operations Center)**, utilizando as ferramentas nativas de monitoramento e logs do Google Cloud.
+## 🧩 Módulos
 
-### 🛡️ Testes de Segurança Realizados:
-1. **Prevenção contra SQL/NoSQL Injection:** O uso do SDK do Firestore combinado com regras de segurança rígidas no servidor (`firestore.rules`) impede qualquer tentativa de injeção de queries maliciosas.
-2. **Proteção contra XSS (Cross-Site Scripting):** O React sanitiza automaticamente todas as entradas de dados, impedindo a execução de scripts maliciosos no navegador dos usuários.
-3. **Mitigação de Prompt Injection (IA):** A integração com o Gemini utiliza a funcionalidade de `systemInstruction`, criando uma barreira que impede que usuários injetem comandos maliciosos nos dados (ex: tentar forçar a IA a ignorar regras através do nome de um funcionário).
-4. **Proteção contra DoS (Denial of Service) e Esgotamento de Cota:** A função de importação de dados em massa (JSON) foi protegida com limites estritos (máximo de 500 registros) e utiliza gravações em lote (`writeBatch`). Isso impede que um atacante trave o sistema ou esgote a cota financeira do Firebase enviando arquivos gigantescos.
-5. **Schema Pollution e Validação Estrita:** As regras do Firestore validam o tamanho máximo de strings (ex: descrições limitadas a 500 caracteres) e os tipos de dados exatos, impedindo que dados corrompidos quebrem os gráficos e dashboards do sistema.
+<table>
+<tr>
+<td width="50%" valign="top">
 
-### 📊 Ambiente de Logs e Monitoramento (Google Cloud)
-A aplicação está preparada para operar em um ambiente de alta observabilidade. Todos os erros críticos de banco de dados são capturados por um sistema de tratamento (`handleFirestoreError`) que gera payloads estruturados em JSON. Esses logs são enviados para o **Google Cloud Logging**, permitindo que uma equipe de SOC configure alertas automatizados para anomalias (ex: múltiplas tentativas de acesso negado por falta de permissão).
+### 👥 Recursos Humanos
 
-1. **Firestore Security Rules (Hardened):** Regras rigorosas de validação no backend. Os usuários só podem ler e escrever dados que pertencem ao seu próprio `uid` (Tenant Isolation). Campos imutáveis (como o próprio `uid`) são protegidos contra adulteração.
-2. **Error Boundaries (Tolerância a Falhas):** Componentes React encapsulados para capturar erros de renderização, evitando que o sistema quebre por completo e exibindo uma interface amigável de recuperação.
-3. **Tratamento de Exceções e Logs:** Padronização de erros de banco de dados (`handleFirestoreError`) com logs detalhados (Operação, Caminho, Auth Info) para facilitar auditorias e debug.
+Core do sistema. Gestão completa de colaboradores com análise assistida por IA.
+
+- **Cadastro completo** · cargo, salário, área e status
+- **Métricas de saúde** · acompanhamento de atestados e bem-estar corporativo
+- **Performance com IA** · avaliação automatizada do perfil cruzando cargo, salário e histórico via Gemini
+
+</td>
+<td width="50%" valign="top">
+
+### 💰 Financeiro
+
+Controle operacional com análise estratégica por IA.
+
+- **Despesas categorizadas** · Operacional, Marketing, TI e outros
+- **Multi-moeda** · BRL, USD, EUR com conversão em tempo real
+- **Receitas (PRO)** · fluxo de caixa e cálculo de lucro líquido
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 📦 Estoque e Operações
+
+Inventário e identidade da empresa em um só lugar.
+
+- **Controle de inventário** · produtos, quantidades, categorias, valor unitário
+- **Portfólio corporativo** · identidade visual, missão, visão e valores
+
+</td>
+<td width="50%" valign="top">
+
+### 🧠 Inteligência Artificial & Analytics
+
+Dashboard interativo e consultoria estratégica automatizada.
+
+- **Dashboards dinâmicos** · gráficos em barras, linhas e pizza (Recharts)
+- **Consultoria Gemini** · chatbot que analisa despesas vs. receitas e sugere planos de ação
+- **System instruction blindada** · prompt injection mitigado por design
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+
+### 🔐 Autenticação & Sistema
+
+- **SSO via Google** (Firebase Authentication) com isolamento de dados por `uid`
+- **Export/Import JSON** para backup e portabilidade entre ambientes
+- **Notificações em tempo real** (`react-hot-toast` + `sonner`)
+- **Dark / Light mode** adaptável à preferência do usuário
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 🚀 Como Executar Localmente (Guia do Desenvolvedor)
+<!-- =================================================================== -->
+<!-- STACK                                                                -->
+<!-- =================================================================== -->
 
-Para rodar este projeto no seu ambiente local (ex: VS Code), siga os passos abaixo:
+## 🛠️ Stack técnica
+
+<details open>
+<summary><b>Frontend</b> · SPA moderna, tipada e responsiva</summary>
+
+<p>
+<img src="https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB">
+<img src="https://img.shields.io/badge/TypeScript_5.8-3178C6?style=flat-square&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/Vite_6-646CFF?style=flat-square&logo=vite&logoColor=white">
+<img src="https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white">
+<img src="https://img.shields.io/badge/Motion-0055FF?style=flat-square&logo=framer&logoColor=white">
+<img src="https://img.shields.io/badge/Recharts-FF6B6B?style=flat-square">
+<img src="https://img.shields.io/badge/Lucide-111111?style=flat-square&logo=lucide&logoColor=white">
+<img src="https://img.shields.io/badge/Sonner-000000?style=flat-square">
+</p>
+
+</details>
+
+<details open>
+<summary><b>Backend & IA</b> · serverless com inteligência integrada</summary>
+
+<p>
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black">
+<img src="https://img.shields.io/badge/Firestore-FFA000?style=flat-square&logo=firebase&logoColor=white">
+<img src="https://img.shields.io/badge/Firebase_Auth-FFCA28?style=flat-square&logo=firebase&logoColor=black">
+<img src="https://img.shields.io/badge/@google/genai-8E75B2?style=flat-square&logo=google&logoColor=white">
+<img src="https://img.shields.io/badge/Gemini_Pro-8E75B2?style=flat-square&logo=google&logoColor=white">
+</p>
+
+</details>
+
+<details open>
+<summary><b>Qualidade & operação</b> · SOC-ready, observável, tipado</summary>
+
+<p>
+<img src="https://img.shields.io/badge/Google_Cloud_Logging-4285F4?style=flat-square&logo=googlecloud&logoColor=white">
+<img src="https://img.shields.io/badge/Firestore_Rules-FF6F00?style=flat-square&logo=firebase&logoColor=white">
+<img src="https://img.shields.io/badge/TypeScript_Strict-3178C6?style=flat-square&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/Error_Boundaries-EF4444?style=flat-square&logo=react&logoColor=white">
+</p>
+
+</details>
+
+---
+
+<!-- =================================================================== -->
+<!-- SEGURANÇA                                                            -->
+<!-- =================================================================== -->
+
+## 🔒 Segurança e SOC
+
+Segurança tratada como requisito, não como etapa final. A arquitetura foi desenhada para se integrar a um **Security Operations Center** usando as ferramentas nativas do Google Cloud.
+
+### Testes de segurança cobertos
+
+| # | Vetor | Defesa |
+|---|---|---|
+| 1 | **NoSQL Injection** | Firestore SDK + `firestore.rules` com validação estrita de queries |
+| 2 | **XSS** | Sanitização automática do React em toda entrada de dados |
+| 3 | **Prompt Injection (IA)** | `systemInstruction` isolada — payloads de usuário nunca sobrescrevem contexto do Gemini |
+| 4 | **DoS / Quota Exhaustion** | Importação em massa limitada a 500 registros via `writeBatch` |
+| 5 | **Schema Pollution** | Firestore Rules validam tipo e tamanho (ex: strings ≤ 500 chars) |
+
+### Hardening e observabilidade
+
+- **Firestore Security Rules (hardened)** · leitura e escrita restritas ao próprio `uid`; campos imutáveis (como o `uid`) protegidos contra adulteração
+- **Error Boundaries** · captura erros de renderização sem derrubar o sistema, exibindo fallback amigável
+- **Tratamento estruturado de exceções** · `handleFirestoreError` gera payloads JSON com Operação, Caminho e Auth Info, prontos para **Google Cloud Logging**
+- **Alertas SOC** · logs estruturados permitem configurar alertas automáticos para anomalias (ex: múltiplos acessos negados em janela curta)
+
+---
+
+<!-- =================================================================== -->
+<!-- RODAR LOCALMENTE                                                     -->
+<!-- =================================================================== -->
+
+## 🚀 Executar localmente
 
 ### Pré-requisitos
-* [Node.js](https://nodejs.org/) (versão 20+ recomendada)
-* Git
 
-### Instalação
+- [Node.js](https://nodejs.org/) **20+**
+- Git
+- Chave de API do Google Gemini ([obter aqui](https://aistudio.google.com/apikey))
 
-1. **Clone ou extraia o repositório:**
-   Abra a pasta do projeto no VS Code.
+### Passos
 
-2. **Instale as dependências:**
-   No terminal do VS Code, execute:
-   ```bash
-   npm install
-   ```
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/Victorzinn704/New-Project.git
+cd New-Project
 
-3. **Configuração de Variáveis de Ambiente:**
-   Crie um arquivo chamado `.env` na raiz do projeto e adicione suas chaves de API. O sistema precisa da chave do Gemini para as funções de IA:
-   ```env
-   VITE_GEMINI_API_KEY=sua_chave_api_do_gemini_aqui
-   ```
-   *(Nota: As configurações do Firebase já estão injetadas no arquivo `firebase-applet-config.json` ou `firebase.ts` e funcionarão automaticamente).*
+# 2. Instalar dependências
+npm install
 
-4. **Inicie o Servidor de Desenvolvimento:**
-   ```bash
-   npm run dev
-   ```
-   Acesse `http://localhost:3000` (ou a porta indicada no terminal) no seu navegador.
+# 3. Configurar variáveis de ambiente
+echo "VITE_GEMINI_API_KEY=sua_chave_api_do_gemini" > .env
+
+# 4. Subir o servidor de desenvolvimento
+npm run dev
+```
+
+App em `http://localhost:3000`.
+> As configurações do Firebase estão injetadas em `firebase-applet-config.json` / `firebase.ts` e funcionam automaticamente em dev.
+
+### Scripts disponíveis
+
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | Dev server (Vite + HMR) na porta 3000 |
+| `npm run build` | Build de produção |
+| `npm run preview` | Preview do build |
+| `npm run lint` | Type-check (`tsc --noEmit`) |
+| `npm run clean` | Remove a pasta `dist` |
 
 ---
 
-## 📂 Estrutura do Projeto
+<!-- =================================================================== -->
+<!-- ESTRUTURA                                                            -->
+<!-- =================================================================== -->
+
+## 📂 Estrutura do projeto
 
 ```text
-/
+.
 ├── src/
-│   ├── components/       # Componentes reutilizáveis (ex: ErrorBoundary)
-│   ├── services/         # Integrações externas (ex: geminiService.ts)
-│   ├── types/            # Definições de interfaces TypeScript (types.ts)
-│   ├── App.tsx           # Componente principal e roteamento de abas
-│   ├── main.tsx          # Ponto de entrada do React
-│   ├── index.css         # Estilos globais e diretivas do Tailwind
+│   ├── components/       # Componentes reutilizáveis (ErrorBoundary, UI)
+│   ├── services/         # Integrações externas (geminiService.ts)
+│   ├── types/            # Definições TypeScript compartilhadas
+│   ├── App.tsx           # Componente raiz + roteamento de abas
+│   ├── main.tsx          # Bootstrap React
+│   ├── index.css         # Estilos globais + diretivas Tailwind
 │   └── firebase.ts       # Configuração e inicialização do Firebase
-├── public/               # Assets estáticos
-├── package.json          # Dependências e scripts do projeto
-├── vite.config.ts        # Configuração do bundler Vite
-└── README.md             # Documentação do projeto
+├── firestore.rules       # Regras de segurança do Firestore (hardened)
+├── firebase-applet-config.json
+├── vite.config.ts
+└── package.json
 ```
 
 ---
 
-## 🗺️ Roadmap Futuro
+<!-- =================================================================== -->
+<!-- ROADMAP                                                              -->
+<!-- =================================================================== -->
 
-* [ ] Implementação de uma coleção `system_logs` no Firestore para auditoria de erros em produção.
-* [ ] Criação de níveis de acesso (RBAC - Role Based Access Control) para permitir múltiplos usuários na mesma empresa (Admin, Gerente, Funcionário).
-* [ ] Geração de relatórios em PDF.
-* [ ] Integração com APIs bancárias via Open Finance.
+## 🗺️ Roadmap
+
+- [ ] Coleção `system_logs` no Firestore para auditoria persistente em produção
+- [ ] **RBAC** (Role Based Access Control) — múltiplos usuários por empresa com perfis Admin / Gerente / Funcionário
+- [ ] Exportação de relatórios em PDF
+- [ ] Integração com APIs bancárias via **Open Finance**
 
 ---
-*Documento gerado e mantido pela Gestão de Projetos.*
+
+<!-- =================================================================== -->
+<!-- AUTOR                                                                -->
+<!-- =================================================================== -->
+
+## 👤 Autor
+
+Construído por **João Victor de Moraes da Cruz** — estudante de Engenharia de Software e founder do [Desk Imperial](https://github.com/Victorzinn704/Desk-Imperial-Open-Source).
+
+<p>
+  <a href="https://github.com/Victorzinn704"><img src="https://img.shields.io/badge/GitHub-111827?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://app.deskimperial.online"><img src="https://img.shields.io/badge/Desk_Imperial-0A66C2?style=for-the-badge&logo=vercel&logoColor=white"></a>
+</p>
