@@ -241,3 +241,66 @@ export const upgradeToPro = functions.onCall(async (request) => {
 
   return { success: true, message: "Upgraded to PRO successfully" };
 });
+
+export const healthCheck = functions.onRequest(async (req, res) => {
+  const startTime = Date.now();
+  const checks: Record<string, { status: string; latency?: number; error?: string }> = {};
+
+  // Check Firestore
+  try {
+    const firestoreStart = Date.now();
+    await admin.firestore().collection("_health").doc("check").get();
+    checks.firestore = {
+      status: "healthy",
+      latency: Date.now() - firestoreStart,
+    };
+  } catch (error) {
+    checks.firestore = {
+      status: "unhealthy",
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+
+  // Check Auth
+  try {
+    const authStart = Date.now();
+    await admin.auth().listUsers(1);
+    checks.auth = {
+      status: "healthy",
+      latency: Date.now() - authStart,
+    };
+  } catch (error) {
+    checks.auth = {
+      status: "unhealthy",
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+
+  // Check Gemini API
+  try {
+    const geminiStart = Date.now();
+    const testResponse = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: "test",
+    });
+    checks.gemini = {
+      status: testResponse ? "healthy" : "unhealthy",
+      latency: Date.now() - geminiStart,
+    };
+  } catch (error) {
+    checks.gemini = {
+      status: "unhealthy",
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+
+  const allHealthy = Object.values(checks).every((check) => check.status === "healthy");
+  const totalLatency = Date.now() - startTime;
+
+  res.status(allHealthy ? 200 : 503).json({
+    status: allHealthy ? "healthy" : "degraded",
+    timestamp: new Date().toISOString(),
+    totalLatency,
+    checks,
+  });
+});

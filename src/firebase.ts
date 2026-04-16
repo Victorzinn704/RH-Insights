@@ -2,6 +2,9 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import { getPerformance } from 'firebase/performance';
+import { initializeAnalytics } from './utils/analytics';
+import { logger } from './utils/logger';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,6 +21,20 @@ const firestoreDatabaseId = import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID;
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app, firestoreDatabaseId);
+
+// Firebase Performance Monitoring
+let perf: ReturnType<typeof getPerformance> | null = null;
+try {
+  perf = getPerformance(app);
+  logger.info('Firebase Performance Monitoring initialized');
+} catch (error) {
+  logger.error('Failed to initialize Firebase Performance', error as Error);
+}
+
+export const performance = perf;
+
+// Firebase Analytics
+initializeAnalytics(app);
 
 // Firebase App Check — protects against abused API usage from stolen config
 if (import.meta.env.VITE_RECAPTCHA_SITE_KEY) {

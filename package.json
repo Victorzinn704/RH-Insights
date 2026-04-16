@@ -13,6 +13,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@sentry/react": "^10.48.0",
     "date-fns": "^4.1.0",
     "dompurify": "^3.3.3",
     "firebase": "^12.10.0",
@@ -22,6 +23,7 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.6.0",
     "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.14.1",
     "recharts": "^3.8.0",
     "tailwindcss": "^4.1.14"
   },

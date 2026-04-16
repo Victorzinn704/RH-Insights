@@ -1,13 +1,6 @@
-import React, { lazy, Suspense, useState } from 'react';
-import { useTheme } from './hooks/useTheme';
-import { useAuthSession } from './hooks/useAuthSession';
-import { useAuthActions } from './hooks/useAuthActions';
-import { useExchangeRates } from './hooks/useExchangeRates';
-import { useFirestoreData } from './hooks/useFirestoreData';
-import { useAiAnalysis } from './hooks/useAiAnalysis';
-import { useModalState } from './hooks/useModalState';
-import { useFirestoreMutations } from './hooks/useFirestoreMutations';
-import { exportData, importData } from './utils/importExport';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AppProvider, useAppContext } from './contexts/AppContext';
 import { LoginScreen } from './components/layout/LoginScreen';
 import { Sidebar } from './components/layout/Sidebar';
 import { RevenueFormModal } from './components/pro/RevenueFormModal';
@@ -31,26 +24,32 @@ function LoadingTab() {
   );
 }
 
-export default function App() {
-  const { isDarkMode, toggleDarkMode } = useTheme();
-  const { user, loading } = useAuthSession();
-  const { handleLogin, handleLogout, upgradeToPro } = useAuthActions({ user });
-  const { rates, displayCurrency, setDisplayCurrency } = useExchangeRates();
-  const data = useFirestoreData(user);
-  const { aiAnalysis, isAnalyzing, aiError, runAiAnalysis, runStrategicDecision } = useAiAnalysis(data.employees, data.expenses);
-  const modals = useModalState();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'employees' | 'expenses' | 'ai' | 'pro'>('dashboard');
-  const mutations = useFirestoreMutations({
+function AppContent() {
+  const {
     user,
-    subscription: data.subscription,
-    portfolio: data.portfolio,
-    modals: { editingEmployee: modals.modals.editingEmployee },
-    onCloseEmployeeModal: modals.closeEmployeeModal,
-    onCloseExpenseModal: modals.closeExpenseModal,
-    onCloseInventoryModal: modals.closeInventoryModal,
-    onCloseRevenueModal: modals.closeRevenueModal,
-    onClosePortfolioModal: modals.closePortfolioModal,
-  });
+    loading,
+    handleLogin,
+    handleLogout,
+    isDarkMode,
+    toggleDarkMode,
+    portfolio,
+    subscription,
+    modals,
+    closeEmployeeModal,
+    closeExpenseModal,
+    closeInventoryModal,
+    closeRevenueModal,
+    closePortfolioModal,
+    addEmployee,
+    addExpense,
+    addInventoryItem,
+    addRevenueRecord,
+    savePortfolio,
+    aiAnalysis,
+    aiError,
+    isAnalyzing,
+    selectEmployee,
+  } = useAppContext();
 
   if (loading) return <div className="h-screen flex items-center justify-center bg-zinc-50">Carregando...</div>;
   if (!user) return <LoginScreen onLogin={handleLogin} />;
@@ -59,150 +58,105 @@ export default function App() {
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-[#09090b] text-zinc-100' : 'bg-[#f8fafc] text-slate-900'} font-sans flex`}>
       <Sidebar
         user={user}
-        portfolio={data.portfolio}
-        subscription={data.subscription}
-        activeTab={activeTab}
-        activeProSubTab={modals.modals.activeProSubTab}
-        isProMenuOpen={modals.modals.isProMenuOpen}
+        portfolio={portfolio}
+        subscription={subscription}
         isDarkMode={isDarkMode}
-        onTabChange={setActiveTab}
-        onProSubTabChange={modals.setProSubTab}
-        onProMenuToggle={modals.toggleProMenu}
         onToggleDarkMode={toggleDarkMode}
         onLogout={handleLogout}
       />
 
       <main className="flex-1 overflow-y-auto p-10">
-        {activeTab === 'dashboard' && (
-          <Suspense fallback={<LoadingTab />}>
-            <DashboardTab
-              employees={data.employees}
-              expenses={data.expenses}
-              displayCurrency={displayCurrency}
-              rates={rates}
-              isDarkMode={isDarkMode}
-              onCurrencyChange={setDisplayCurrency}
-              onExport={() => exportData({ employees: data.employees, expenses: data.expenses, inventory: data.inventory, revenue: data.revenue, portfolio: data.portfolio })}
-              onImport={(e) => importData(e, { user, subscription: data.subscription, onImport: () => {} })}
-            />
-          </Suspense>
-        )}
-
-        {activeTab === 'employees' && (
-          <Suspense fallback={<LoadingTab />}>
-            <EmployeesTab
-              employees={data.employees}
-              isDarkMode={isDarkMode}
-              displayCurrency={displayCurrency}
-              rates={rates}
-              onAddNew={() => modals.openEmployeeModal(null)}
-              onEdit={(emp: import('./types').Employee) => modals.openEmployeeModal(emp)}
-              onDelete={mutations.deleteEmployee}
-              onAiAnalysis={(emp: import('./types').Employee) => { modals.selectEmployee(emp); runAiAnalysis(emp); }}
-            />
-          </Suspense>
-        )}
-
-        {activeTab === 'expenses' && (
-          <Suspense fallback={<LoadingTab />}>
-            <ExpensesTab
-              expenses={data.expenses}
-              displayCurrency={displayCurrency}
-              rates={rates}
-              isDarkMode={isDarkMode}
-              onCurrencyChange={setDisplayCurrency}
-              onAddExpense={modals.openExpenseModal}
-            />
-          </Suspense>
-        )}
-
-        {activeTab === 'ai' && (
-          <Suspense fallback={<LoadingTab />}>
-            <AiTab
-              employees={data.employees}
-              isAnalyzing={isAnalyzing}
-              aiAnalysis={aiAnalysis}
-              isDarkMode={isDarkMode}
-              onRunStrategicDecision={runStrategicDecision}
-            />
-          </Suspense>
-        )}
-
-        {activeTab === 'pro' && (
-          <Suspense fallback={<LoadingTab />}>
-            <ProTab
-              activeProSubTab={modals.modals.activeProSubTab}
-              subscription={data.subscription}
-              user={user}
-              employees={data.employees}
-              portfolio={data.portfolio}
-              inventory={data.inventory}
-              revenue={data.revenue}
-              displayCurrency={displayCurrency}
-              rates={rates}
-              isDarkMode={isDarkMode}
-              isAnalyzing={isAnalyzing}
-              onUpgradeToPro={upgradeToPro}
-              onRunStrategicDecision={runStrategicDecision}
-              onOpenRevenueModal={modals.openRevenueModal}
-              onOpenInventoryModal={modals.openInventoryModal}
-              onOpenPortfolioModal={modals.openPortfolioModal}
-            />
-          </Suspense>
-        )}
+        <Routes>
+          <Route path="/" element={
+            <Suspense fallback={<LoadingTab />}>
+              <DashboardTab />
+            </Suspense>
+          } />
+          <Route path="/employees" element={
+            <Suspense fallback={<LoadingTab />}>
+              <EmployeesTab />
+            </Suspense>
+          } />
+          <Route path="/expenses" element={
+            <Suspense fallback={<LoadingTab />}>
+              <ExpensesTab />
+            </Suspense>
+          } />
+          <Route path="/ai" element={
+            <Suspense fallback={<LoadingTab />}>
+              <AiTab />
+            </Suspense>
+          } />
+          <Route path="/pro" element={
+            <Suspense fallback={<LoadingTab />}>
+              <ProTab />
+            </Suspense>
+          } />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
       <Suspense fallback={null}>
         <EmployeeFormModal
-          isOpen={modals.modals.isEmployeeModalOpen}
-          editingEmployee={modals.modals.editingEmployee}
+          isOpen={modals.isEmployeeModalOpen}
+          editingEmployee={modals.editingEmployee}
           isDarkMode={isDarkMode}
-          onClose={modals.closeEmployeeModal}
-          onSubmit={mutations.addEmployee}
+          onClose={closeEmployeeModal}
+          onSubmit={addEmployee}
         />
       </Suspense>
 
       <Suspense fallback={null}>
         <ExpenseFormModal
-          isOpen={modals.modals.isExpenseModalOpen}
+          isOpen={modals.isExpenseModalOpen}
           isDarkMode={isDarkMode}
-          onClose={modals.closeExpenseModal}
-          onSubmit={mutations.addExpense}
+          onClose={closeExpenseModal}
+          onSubmit={addExpense}
         />
       </Suspense>
 
       <InventoryFormModal
-        isOpen={modals.modals.isInventoryModalOpen}
+        isOpen={modals.isInventoryModalOpen}
         isDarkMode={isDarkMode}
-        onClose={modals.closeInventoryModal}
-        onSubmit={mutations.addInventoryItem}
+        onClose={closeInventoryModal}
+        onSubmit={addInventoryItem}
       />
 
       <RevenueFormModal
-        isOpen={modals.modals.isRevenueModalOpen}
+        isOpen={modals.isRevenueModalOpen}
         isDarkMode={isDarkMode}
-        onClose={modals.closeRevenueModal}
-        onSubmit={mutations.addRevenueRecord}
+        onClose={closeRevenueModal}
+        onSubmit={addRevenueRecord}
       />
 
       <PortfolioFormModal
-        isOpen={modals.modals.isPortfolioModalOpen}
-        portfolio={data.portfolio}
+        isOpen={modals.isPortfolioModalOpen}
+        portfolio={portfolio}
         isDarkMode={isDarkMode}
-        onClose={modals.closePortfolioModal}
-        onSubmit={mutations.savePortfolio}
+        onClose={closePortfolioModal}
+        onSubmit={savePortfolio}
       />
 
       <Suspense fallback={null}>
         <AiAnalysisModal
-          selectedEmployee={modals.modals.selectedEmployee}
+          selectedEmployee={modals.selectedEmployee}
           aiAnalysis={aiAnalysis}
           aiError={aiError}
           isAnalyzing={isAnalyzing}
           isDarkMode={isDarkMode}
-          onClose={() => modals.selectEmployee(null)}
+          onClose={() => selectEmployee(null)}
         />
       </Suspense>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
+    </BrowserRouter>
   );
 }

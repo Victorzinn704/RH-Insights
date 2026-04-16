@@ -23,8 +23,13 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log details to console for debugging — never expose to user in production
-    console.error('[ErrorBoundary] Uncaught error:', error, errorInfo.componentStack);
+    // Import logger dynamically to avoid circular dependencies
+    import('../utils/logger').then(({ logger }) => {
+      logger.error('[ErrorBoundary] Uncaught error', error, {
+        component: 'ErrorBoundary',
+        componentStack: errorInfo.componentStack,
+      });
+    });
     this.setState({ errorInfo });
   }
 
