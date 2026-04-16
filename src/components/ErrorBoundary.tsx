@@ -23,7 +23,8 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    // Log details to console for debugging — never expose to user in production
+    console.error('[ErrorBoundary] Uncaught error:', error, errorInfo.componentStack);
     this.setState({ errorInfo });
   }
 
@@ -37,14 +38,8 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
             <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Ops! Algo deu errado.</h2>
             <p className="text-zinc-500 dark:text-zinc-400 mb-6">
-              Encontramos um erro inesperado. Nossa equipe técnica já pode ter sido notificada.
+              Encontramos um erro inesperado. Tente recarregar a página.
             </p>
-            
-            <div className="bg-zinc-100 dark:bg-zinc-950 p-4 rounded-xl text-left overflow-auto max-h-48 mb-6 border border-black/5 dark:border-zinc-800">
-              <p className="text-xs font-mono text-red-600 dark:text-red-400 break-words">
-                {this.state.error?.toString()}
-              </p>
-            </div>
 
             <button
               onClick={() => window.location.reload()}

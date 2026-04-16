@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Role = 'Gerente' | 'Senior' | 'Pleno' | 'Junior' | 'Estagiário';
 export type Status = 'Disponível' | 'Tratamento de Saúde' | 'Férias' | 'Viagem a Trabalho' | 'Na Empresa' | 'Home Office' | 'Fora de Expediente' | 'Atestado';
 export type ExpenseType = 'API' | 'Cloud' | 'Licença' | 'Água' | 'Luz' | 'Internet' | 'Outros';
@@ -24,7 +26,7 @@ export interface Expense {
   type: ExpenseType;
   amount: number;
   currency: Currency;
-  date: any;
+  date: Timestamp;
   description: string;
   uid: string;
 }
@@ -43,7 +45,7 @@ export interface RevenueRecord {
   type: 'in' | 'out';
   amount: number;
   category: string;
-  date: any;
+  date: Timestamp;
   description: string;
   uid: string;
 }
@@ -51,7 +53,7 @@ export interface RevenueRecord {
 export interface Subscription {
   plan: PlanType;
   status: 'active' | 'canceled';
-  currentPeriodEnd: any;
+  currentPeriodEnd: Timestamp | null;
   uid: string;
 }
 

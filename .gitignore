@@ -6,3 +6,17 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Firebase config JSON (contains API keys)
+firebase-applet-config.json
+firebase-blueprint.json
+metadata.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db

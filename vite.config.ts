@@ -1,23 +1,70 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig, loadEnv} from 'vite';
+import { createHash } from 'crypto';
+import { defineConfig, loadEnv, Plugin } from 'vite';
 
-export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, '.', '');
+// Plugin to inject Subresource Integrity (SRI) hashes into index.html
+function sriHashPlugin(): Plugin {
   return {
-    plugins: [react(), tailwindcss()],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    name: 'sri-hash',
+    enforce: 'post',
+    apply: 'build',
+    transformIndexHtml(html, ctx) {
+      if (!ctx.bundle) return html;
+
+      const tags: Array<{ tag: string; attrs: Record<string, string> }> = [];
+
+      for (const [fileName, chunk] of Object.entries(ctx.bundle)) {
+        if (chunk.type === 'chunk' && chunk.fileName.endsWith('.js')) {
+          const hash = createHash('sha384').update(chunk.code).digest('base64');
+          tags.push({
+            tag: 'script',
+            attrs: {
+              src: `/${fileName}`,
+              integrity: `sha384-${hash}`,
+              crossorigin: 'anonymous',
+            },
+          });
+        } else if (chunk.type === 'asset' && chunk.fileName.endsWith('.css')) {
+          const hash = createHash('sha384').update(chunk.source as string).digest('base64');
+          tags.push({
+            tag: 'link',
+            attrs: {
+              rel: 'stylesheet',
+              href: `/${fileName}`,
+              integrity: `sha384-${hash}`,
+              crossorigin: 'anonymous',
+            },
+          });
+        }
+      }
+
+      return tags;
     },
+  };
+}
+
+export default defineConfig(({ mode }) => {
+  const _env = loadEnv(mode, '.', '');
+  return {
+    plugins: [react(), tailwindcss(), sriHashPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            recharts: ['recharts'],
+            firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/functions', 'firebase/app-check'],
+          },
+        },
+      },
+    },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
     },
   };

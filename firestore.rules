@@ -22,7 +22,7 @@ service cloud.firestore {
              data.section is string && data.section.size() < 100 &&
              data.salary is number && data.salary >= 0 &&
              data.status in ['Disponível', 'Tratamento de Saúde', 'Férias', 'Viagem a Trabalho', 'Na Empresa', 'Home Office', 'Fora de Expediente', 'Atestado'] &&
-             data.performance is number && data.performance >= 0 && data.performance <= 100 &&
+             data.performance is number && data.performance >= 1 && data.performance <= 10 &&
              data.complaints is number && data.complaints >= 0 &&
              data.medicalCertificatesCount is number && data.medicalCertificatesCount >= 0 &&
              data.area is string && data.area.size() < 100;
@@ -96,10 +96,20 @@ service cloud.firestore {
     }
 
     match /subscriptions/{subId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid);
-      allow create: if isAuthenticated() && isOwner(request.resource.data.uid) && isValidSubscription(request.resource.data);
-      allow update: if isAuthenticated() && isOwner(resource.data.uid) && uidNotModified() && isValidSubscription(request.resource.data);
-      allow delete: if isAuthenticated() && isOwner(resource.data.uid);
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      // Users can only create their own initial free subscription
+      allow create: if isAuthenticated()
+        && isOwner(request.resource.data.uid)
+        && isValidSubscription(request.resource.data)
+        && request.resource.data.plan == 'free';
+      // Only allow plan changes from Cloud Functions (via Admin SDK, bypasses rules)
+      // Client-side writes are blocked for plan field
+      allow update: if isAuthenticated()
+        && resource.data.uid == request.auth.uid
+        && !('plan' in request.resource.data)
+        && !('status' in request.resource.data)
+        && !('currentPeriodEnd' in request.resource.data);
+      allow delete: if false;
     }
 
     match /portfolios/{portfolioId} {
