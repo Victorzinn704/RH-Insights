@@ -3,16 +3,16 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/Victorzinn704/New-Project.git
-cd New-Project
-npm install
+git clone https://github.com/Victorzinn704/RH-Insights.git
+cd RH-Insights
+npm ci
 cp .env.example .env  # configure Firebase credentials
 npm run dev
 ```
 
 ## Development Workflow
 
-1. Create a branch for your work: `git checkout -b feature/my-feature`
+1. Create a branch for your issue: `git switch -c feat/123-my-feature`
 2. Make changes
 3. Run quality checks: `npm run lint && npm test && npm run build`
 4. Commit with a descriptive message
@@ -26,9 +26,28 @@ All PRs must pass the CI pipeline (`.github/workflows/ci.yml`):
 |-------|---------|-------------------|
 | Lint | `npm run lint` | ESLint rules + TypeScript strict type check |
 | Build | `npm run build` | Vite production build succeeds |
-| Test | `npm test` | All 27 tests pass |
+| Test | `npm test` | Test suite passes |
+| Functions | `npm --prefix functions run build` | Cloud Functions TypeScript compiles |
 
 Run these locally before pushing to avoid CI failures.
+
+Use Node.js 22 for both the frontend and Functions. The Firebase runtime and CI
+use the same version. Node.js 20 reaches decommission on 2026-10-30; see the
+[official runtime schedule](https://docs.cloud.google.com/functions/docs/runtime-support).
+
+Install the Functions dependencies with `npm --prefix functions ci` before the
+first Functions build. The generated `functions/lib/` directory is not versioned;
+Firebase runs the build through the `predeploy` hook before deploying Functions.
+After building, run `npm --prefix functions test` to check the compiled Functions
+entry point and request validation locally without a deployment or cloud access.
+
+CI also runs `npm audit --audit-level=high` in both dependency trees. The root
+manifest temporarily overrides only Firestore's `@grpc/grpc-js` dependency to
+1.13.6, which fixes [GHSA-m9gg-hp2v-232j](https://github.com/advisories/GHSA-m9gg-hp2v-232j)
+and [GHSA-f596-whhp-79r4](https://github.com/advisories/GHSA-f596-whhp-79r4).
+Remove the override once Firestore's own range resolves a patched version, after
+running `npm run test:firebase` and the normal checks. That smoke test imports the
+real Node SDK and exercises Firestore offline; it does not call a cloud service.
 
 ## Code Style
 
@@ -107,3 +126,7 @@ fix(ai): prevent infinite loading on API error
 test(hooks): add useTheme unit tests
 chore: remove unused @google/genai from frontend deps
 ```
+
+## Fluxo Git e revisão
+
+Siga também o [fluxo de issues, branches, commits e pull requests](CONTRIBUTING-GIT.md).

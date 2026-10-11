@@ -1,8 +1,10 @@
 import * as functions from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore, Timestamp } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
 import { GoogleGenAI } from "@google/genai";
 
-admin.initializeApp();
+initializeApp();
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
@@ -216,7 +218,7 @@ export const upgradeToPro = functions.onCall(async (request) => {
   const uid = request.auth.uid;
 
   // Check if user already has an active pro subscription
-  const subRef = admin.firestore().collection("subscriptions").doc(uid);
+  const subRef = getFirestore().collection("subscriptions").doc(uid);
   const subDoc = await subRef.get();
 
   if (subDoc.exists) {
@@ -227,7 +229,7 @@ export const upgradeToPro = functions.onCall(async (request) => {
   }
 
   // Set PRO subscription server-side (trusted context)
-  const currentPeriodEnd = admin.firestore.Timestamp.fromDate(
+  const currentPeriodEnd = Timestamp.fromDate(
     new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
   );
 
@@ -236,7 +238,7 @@ export const upgradeToPro = functions.onCall(async (request) => {
     status: "active",
     currentPeriodEnd,
     uid,
-    upgradedAt: admin.firestore.Timestamp.now(),
+    upgradedAt: Timestamp.now(),
   }, { merge: true });
 
   return { success: true, message: "Upgraded to PRO successfully" };
@@ -249,7 +251,7 @@ export const healthCheck = functions.onRequest(async (req, res) => {
   // Check Firestore
   try {
     const firestoreStart = Date.now();
-    await admin.firestore().collection("_health").doc("check").get();
+    await getFirestore().collection("_health").doc("check").get();
     checks.firestore = {
       status: "healthy",
       latency: Date.now() - firestoreStart,
@@ -264,7 +266,7 @@ export const healthCheck = functions.onRequest(async (req, res) => {
   // Check Auth
   try {
     const authStart = Date.now();
-    await admin.auth().listUsers(1);
+    await getAuth().listUsers(1);
     checks.auth = {
       status: "healthy",
       latency: Date.now() - authStart,
