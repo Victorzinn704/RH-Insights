@@ -3,9 +3,9 @@
 ## Getting Started
 
 ```bash
-git clone https://github.com/Victorzinn704/New-Project.git
-cd New-Project
-npm install
+git clone https://github.com/Victorzinn704/RH-Insights.git
+cd RH-Insights
+npm ci
 cp .env.example .env  # configure Firebase credentials
 npm run dev
 ```
