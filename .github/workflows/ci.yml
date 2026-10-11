@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
       - name: Type check
         run: npm run lint
 
@@ -34,6 +37,9 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Check Firebase Node dependency
+        run: npm run test:firebase
 
   functions:
     name: Build Firebase Functions
@@ -51,6 +57,8 @@ jobs:
           cache-dependency-path: functions/package-lock.json
       - name: Install Functions dependencies
         run: npm ci
+      - name: Audit Functions dependencies
+        run: npm audit --audit-level=high
       - name: Compile Functions
         run: npm run build
       - name: Test Functions runtime
