@@ -12,7 +12,7 @@ npm run dev
 
 ## Development Workflow
 
-1. Create a branch for your work: `git checkout -b feature/my-feature`
+1. Create a branch for your issue: `git switch -c feat/123-my-feature`
 2. Make changes
 3. Run quality checks: `npm run lint && npm test && npm run build`
 4. Commit with a descriptive message
@@ -26,9 +26,14 @@ All PRs must pass the CI pipeline (`.github/workflows/ci.yml`):
 |-------|---------|-------------------|
 | Lint | `npm run lint` | ESLint rules + TypeScript strict type check |
 | Build | `npm run build` | Vite production build succeeds |
-| Test | `npm test` | All 27 tests pass |
+| Test | `npm test` | Test suite passes |
+| Functions | `npm --prefix functions run build` | Cloud Functions TypeScript compiles |
 
 Run these locally before pushing to avoid CI failures.
+
+Install the Functions dependencies with `npm --prefix functions ci` before the
+first Functions build. The generated `functions/lib/` directory is not versioned;
+Firebase runs the build through the `predeploy` hook before deploying Functions.
 
 ## Code Style
 
