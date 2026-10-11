@@ -453,7 +453,7 @@
 - **Typecheck passa** — mas com `strict: false`, `any` é silenciosamente aceito
 
 ### Achados adicionais da auditoria profunda (2ª varredura)
-- **Firebase API key real exposta** — `AIzaSyBDccEaBqorpEoFYnSfTGDuBDxZ-rZbLLQ` em `firebase-applet-config.json`, arquivo NÃO está no `.gitignore`
+- **Firebase API key real exposta** — `[valor redigido]` em `firebase-applet-config.json`, arquivo NÃO está no `.gitignore`
 - **`employees.sort()` muta state** na tab AI (linha 1155) — bug confirmado
 - **Botões sem handler** — "Gerar Pitch de Vendas" (linha 1448) e "Copiar" (linha 1467) são dead UI
 - **Zero `useMemo`/`useCallback`** — todos os cálculos derivados rodam em todo render

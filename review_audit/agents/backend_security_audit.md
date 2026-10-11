@@ -22,7 +22,7 @@ The security model rests on three pillars: Firebase Authentication for identity,
 **Severity:** Critical
 **Confidence:** Confirmed fact
 **Evidence:**
-- `firebase-applet-config.json`, line 4: `"apiKey": "AIzaSyBDccEaBqorpEoFYnSfTGDuBDxZbLLQ"`
+- `firebase-applet-config.json`, line 4: `"apiKey": "[valor redigido]"`
 - `src/firebase.ts`, line 4: imports the JSON config directly; the key is bundled into the client-side application
 
 **Impact:** The Firebase API key is exposed in the client bundle. While Firebase API keys are not secrets in the traditional sense (they are designed to be client-exposed), this key is tied to a specific project that has weak additional protections. An attacker can extract this key and use it to:
