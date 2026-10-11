@@ -63,7 +63,7 @@ HR Insight é uma plataforma SaaS de gestão de recursos humanos e finanças, co
                │ HTTPS                        │ HTTPS
                ▼                              ▼
 ┌──────────────────────┐        ┌──────────────────────────┐
-│  Firebase            │        │  Cloud Functions (Node 20)│
+│  Firebase            │        │  Cloud Functions (Node 22)│
 │  ┌────────────────┐  │        │  ┌────────────────────┐  │
 │  │ Auth (Google)  │  │        │  │ aiProxy            │  │
 │  │ Firestore      │  │        │  │  - Rate limiting   │  │
@@ -173,7 +173,7 @@ Para detalhes completos, veja [SECURITY.md](SECURITY.md).
 ## Desenvolvimento
 
 ### Pré-requisitos
-- Node.js 20+
+- Node.js 22 (frontend, Functions e CI)
 - npm 10+
 
 ### Setup
