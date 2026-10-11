@@ -208,11 +208,12 @@ npm run dev
 ### Deploy Cloud Functions
 
 ```bash
-# Instale dependências das functions
-cd functions && npm install && cd ..
+# Instale dependências das functions com Node.js 22
+npm --prefix functions ci
 
-# Configure a chave do Gemini
-firebase functions:config:set gemini.api_key="SUA_CHAVE"
+# Configure GEMINI_API_KEY no arquivo local não versionado
+cp functions/.env.example functions/.env
+# Edite functions/.env antes de executar o deploy
 
 # Deploy
 firebase deploy --only functions
