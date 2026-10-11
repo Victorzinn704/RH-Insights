@@ -107,3 +107,7 @@ fix(ai): prevent infinite loading on API error
 test(hooks): add useTheme unit tests
 chore: remove unused @google/genai from frontend deps
 ```
+
+## Fluxo Git e revisão
+
+Siga também o [fluxo de issues, branches, commits e pull requests](CONTRIBUTING-GIT.md).
