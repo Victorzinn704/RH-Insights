@@ -10,6 +10,7 @@
     "clean": "npx rimraf dist",
     "lint": "eslint . && tsc --noEmit",
     "test": "vitest run",
+    "test:firebase": "node scripts/check-firebase.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -26,6 +27,11 @@
     "react-router-dom": "^7.14.1",
     "recharts": "^3.8.0",
     "tailwindcss": "^4.1.14"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.13.6"
+    }
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

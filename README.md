@@ -63,7 +63,7 @@ HR Insight é uma plataforma SaaS de gestão de recursos humanos e finanças, co
                │ HTTPS                        │ HTTPS
                ▼                              ▼
 ┌──────────────────────┐        ┌──────────────────────────┐
-│  Firebase            │        │  Cloud Functions (Node 20)│
+│  Firebase            │        │  Cloud Functions (Node 22)│
 │  ┌────────────────┐  │        │  ┌────────────────────┐  │
 │  │ Auth (Google)  │  │        │  │ aiProxy            │  │
 │  │ Firestore      │  │        │  │  - Rate limiting   │  │
@@ -173,7 +173,7 @@ Para detalhes completos, veja [SECURITY.md](SECURITY.md).
 ## Desenvolvimento
 
 ### Pré-requisitos
-- Node.js 20+
+- Node.js 22 (frontend, Functions e CI)
 - npm 10+
 
 ### Setup
@@ -208,11 +208,12 @@ npm run dev
 ### Deploy Cloud Functions
 
 ```bash
-# Instale dependências das functions
-cd functions && npm install && cd ..
+# Instale dependências das functions com Node.js 22
+npm --prefix functions ci
 
-# Configure a chave do Gemini
-firebase functions:config:set gemini.api_key="SUA_CHAVE"
+# Configure GEMINI_API_KEY no arquivo local não versionado
+cp functions/.env.example functions/.env
+# Edite functions/.env antes de executar o deploy
 
 # Deploy
 firebase deploy --only functions
